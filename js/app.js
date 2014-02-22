@@ -1,17 +1,35 @@
 var myModule = angular.module('Reservations', []);
 
 myModule.controller('MainCtrl', function($scope) { 
+	
+	var buildIndex = function(source, property) {
+		var tempArray = [];
+		for(var i = 0, len = source.length; i < len; ++i) {
+			tempArray[source[i][property]] = source[i];
+		}
+		return tempArray;
+	};
+	
+	
 	$scope.name = 'Andy';
 	$scope.currentRoom;
 	
 	$scope.setCurrentRoom = function(room) {
 		$scope.currentRoom = room;
+		$scope.currentType = $scope.typesIndex[room.type];
+	};
+	
+	$scope.setCurrentType = function(type) {
+		if(typeof $scope.currentRoom !== 'undefined') {
+			$scope.currentRoom.type = type.name;
+		}
 	};
 	
 	$scope.addRoom = function() {
 		$scope.rooms.push({
 			code:'Add Room',
-			description:'puppy room.'
+			description:'puppy room.',
+			type: 'Room Type'
 		});
 	};
 	
@@ -20,7 +38,7 @@ myModule.controller('MainCtrl', function($scope) {
 	      description:'Description pending.',
 	      criteria:'Criteria pending.',
 	      status:'To Do',
-	      type:'Feature',
+	      type:'Single',
 	      reporter:'Lukas Ruebbelke',
 	      assignee:'Brian Ford'},
 	      
@@ -28,7 +46,7 @@ myModule.controller('MainCtrl', function($scope) {
 	      description:'Description pending.',
 	      criteria:'Criteria pending.',
 	      status:'To Do',
-	      type:'Feature',
+	      type:'Single',
 	      reporter:'Lukas Ruebbelke',
 	      assignee:'Brian Ford'},
 	      
@@ -36,7 +54,7 @@ myModule.controller('MainCtrl', function($scope) {
 	      description:'Description pending.',
 	      criteria:'Criteria pending.',
 	      status:'To Do',
-	      type:'Feature',
+	      type:'Single',
 	      reporter:'Lukas Ruebbelke',
 	      assignee:'Brian Ford'},
 	      
@@ -44,7 +62,7 @@ myModule.controller('MainCtrl', function($scope) {
 	      description:'Description pending.',
 	      criteria:'Criteria pending.',
 	      status:'To Do',
-	      type:'Feature',
+	      type:'Single',
 	      reporter:'Lukas Ruebbelke',
 	      assignee:'Brian Ford'},
 	      
@@ -52,7 +70,7 @@ myModule.controller('MainCtrl', function($scope) {
 	      description:'Description pending.',
 	      criteria:'Criteria pending.',
 	      status:'To Do',
-	      type:'Feature',
+	      type:'Single',
 	      reporter:'Lukas Ruebbelke',
 	      assignee:'Brian Ford'}
 	 ];
@@ -68,9 +86,11 @@ myModule.controller('MainCtrl', function($scope) {
 	];
 	
 	$scope.types = [
-		{name:'Feature'},
-		{name:'Enhancement'},
-		{name:'Bug'},
-		{name:'Spike'}
-	];
+		{name:'Single'},
+		{name:'Double'},
+		{name:'Suite'}
+	];	
+	
+	$scope.typesIndex = buildIndex($scope.types, 'name');
+		
 });

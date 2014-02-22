@@ -19,6 +19,7 @@
 				<h4>{{room.code}}</h4>
 				<p>{{room.description}}</p>
 				<p>{{room.criteria}}</p>
+				<p>{{room.type}}</p>
 			</div>
 			<br>
 			<a class="btn" ng-click="addRoom()">
@@ -60,6 +61,14 @@
 					<label class="control-label" for="inputAssignee">Assignee</label>
 					<div class="controls">
 						<input type="text" id="inputAssignee" placeholder="Assignee" ng-model="currentRoom.assignee">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputType">Type</label>
+					<div class="controls">
+						<select id="inputType" ng-model="currentType" ng-options="t.name for t in types"
+							ng-change="setCurrentType(currentType)">
+						</select>
 					</div>
 				</div>
 			</form>
