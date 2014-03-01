@@ -1,7 +1,67 @@
-var myModule = angular.module('Reservations', []);
+var myModule = angular.module('Reservations', ['wtrRestServices']);
 
-myModule.controller('MainCtrl', function($scope) { 
+myModule.factory('kennelresModel', function() {
+	var getTypes = function() {
+		var tempArray = [
+	        {name:'Single'},
+	        {name:'Double'},
+	        {name:'Suite'}
+	       ];	
+		return tempArray;
+	};
 	
+	var getRooms = function() {
+		var tempArray = [
+			{code:'Room 001',
+			 description:'Description pending.',
+			 criteria:'Criteria pending.',
+			 status:'To Do',
+			 type:'Single',
+			 reporter:'Lukas Ruebbelke',
+			 assignee:'Brian Ford'},
+			    
+			{code:'Room 002',
+			 description:'Description pending.',
+			 criteria:'Criteria pending.',
+			 status:'To Do',
+			 type:'Single',
+			 reporter:'Lukas Ruebbelke',
+			 assignee:'Brian Ford'},
+			    
+			{code:'Room 003',
+			 description:'Description pending.',
+			 criteria:'Criteria pending.',
+			 status:'To Do',
+			 type:'Single',
+			 reporter:'Lukas Ruebbelke',
+			 assignee:'Brian Ford'},
+			    
+			{code:'Room 004',
+			 description:'Description pending.',
+			 criteria:'Criteria pending.',
+			 status:'To Do',
+			 type:'Single',
+			 reporter:'Lukas Ruebbelke',
+			 assignee:'Brian Ford'},
+			    
+			{code:'Room 005',
+			 description:'Description pending.',
+			 criteria:'Criteria pending.',
+			 status:'To Do',
+			 type:'Single',
+			 reporter:'Lukas Ruebbelke',
+			 assignee:'Brian Ford'}
+		];
+		return tempArray;
+	};
+	return {
+		getTypes: getTypes,
+		getRooms	: getRooms
+	};
+	        	
+});
+
+myModule.factory('kennelresHelper', function() {
 	var buildIndex = function(source, property) {
 		var tempArray = [];
 		for(var i = 0, len = source.length; i < len; ++i) {
@@ -9,10 +69,22 @@ myModule.controller('MainCtrl', function($scope) {
 		}
 		return tempArray;
 	};
-	
+	return {
+		buildIndex: buildIndex
+	};
+});
+
+myModule.controller('MainCtrl', function($window, $scope, kennelresHelper, kennelresModel, Users) { 
 	
 	$scope.name = 'Andy';
 	$scope.currentRoom;
+	//$scope.users = {};
+	
+	$scope.types = kennelresModel.getTypes();
+	$scope.rooms = kennelresModel.getRooms();
+	
+	$scope.users = Users.get({org: 'mh'});
+	$window.alert($scope.users.$promise);
 	
 	$scope.setCurrentRoom = function(room) {
 		$scope.currentRoom = room;
@@ -33,64 +105,12 @@ myModule.controller('MainCtrl', function($scope) {
 		});
 	};
 	
-	$scope.rooms = [
-	     {code:'Room 001',
-	      description:'Description pending.',
-	      criteria:'Criteria pending.',
-	      status:'To Do',
-	      type:'Single',
-	      reporter:'Lukas Ruebbelke',
-	      assignee:'Brian Ford'},
-	      
-	     {code:'Room 002',
-	      description:'Description pending.',
-	      criteria:'Criteria pending.',
-	      status:'To Do',
-	      type:'Single',
-	      reporter:'Lukas Ruebbelke',
-	      assignee:'Brian Ford'},
-	      
-	     {code:'Room 003',
-	      description:'Description pending.',
-	      criteria:'Criteria pending.',
-	      status:'To Do',
-	      type:'Single',
-	      reporter:'Lukas Ruebbelke',
-	      assignee:'Brian Ford'},
-	      
-	     {code:'Room 004',
-	      description:'Description pending.',
-	      criteria:'Criteria pending.',
-	      status:'To Do',
-	      type:'Single',
-	      reporter:'Lukas Ruebbelke',
-	      assignee:'Brian Ford'},
-	      
-	     {code:'Room 005',
-	      description:'Description pending.',
-	      criteria:'Criteria pending.',
-	      status:'To Do',
-	      type:'Single',
-	      reporter:'Lukas Ruebbelke',
-	      assignee:'Brian Ford'}
-	 ];
+	$scope.getUsers = function(org) {
+		$scope.users = Users.query(org);
+	};
 	
-	$scope.statuses = [
-		{name:'Back Log'},
-		{name:'To Do'},
-		{name:'In Progress'},
-		{name:'Code Review'},
-		{name:'QA Review'},
-		{name:'Verified'},
-		{name:'Done'}
-	];
 	
-	$scope.types = [
-		{name:'Single'},
-		{name:'Double'},
-		{name:'Suite'}
-	];	
 	
-	$scope.typesIndex = buildIndex($scope.types, 'name');
+	$scope.typesIndex = kennelresHelper.buildIndex(kennelresModel.getTypes(), 'name');
 		
 });
